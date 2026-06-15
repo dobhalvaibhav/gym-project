@@ -7,7 +7,6 @@ const footerLinks = [
       { label: 'Strength Training', href: '#programs' },
       { label: 'HIIT & Conditioning', href: '#programs' },
       { label: 'Recovery & Mobility', href: '#programs' },
-      { label: 'Free Trial', href: '#contact' },
     ],
   },
   {
@@ -73,11 +72,11 @@ export default function Footer() {
         ))}
 
         <div>
-          <p className="text-sm uppercase tracking-[0.32em] text-neon-blue">Contact</p>
+          <p className="text-sm uppercase tracking-[0.32em] text-neon-blue">Location</p>
           <div className="mt-6 space-y-4 text-sm text-muted">
-            <p>12 Steel Quarter, London, EC1A 1BB</p>
-            <p>+44 20 7000 0000</p>
-            <p>hello@aetherfitness.com</p>
+            <p>sector-12 noida, Uttar Pradesh</p>
+            <p>+91 73025 19 340</p>
+            <p>zerohisoka0@gmail.com</p>
           </div>
         </div>
       </div>
