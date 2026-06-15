@@ -1,0 +1,29 @@
+.ripple {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-expand 600ms ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-expand {
+  to {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+.btn-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.arrow {
+  display: inline-block;
+  transform: translateX(0);
+  transition: transform 200ms ease;
+}
