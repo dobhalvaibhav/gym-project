@@ -17,7 +17,7 @@ export default function CTABanner() {
             Ready to Forge Your Edge?
           </motion.h2>
           <p className="mt-5 text-lg leading-8 text-black/75">
-            Your first 2 classes are completely free. No excuses.
+            Your first 2 days are completely free. No excuses.
           </p>
         </div>
 
