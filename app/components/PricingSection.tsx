@@ -6,29 +6,29 @@ import Button from './ui/Button';
 const pricingPlans = [
   {
     title: 'Starter',
-    price: '£49',
+    price: '₹999',
     frequency: '/mo',
-    features: ['3 classes/week', 'App access', 'Community access'],
+    features: ['gym access', 'App access', 'Community access'],
     featured: false,
     buttonFilled: false,
   },
   {
     title: 'Elite',
-    price: '£89',
+    price: '₹1999',
     frequency: '/mo',
     features: [
-      'Unlimited classes',
+      'Unlimited access of full gym',
       'Personal program',
       'Nutrition guide',
-      'Priority booking',
-      'Coach check-ins',
+      'Priority clieng',
+      'Coach personalised tips',
     ],
     featured: true,
     buttonFilled: true,
   },
   {
     title: 'Forge',
-    price: '£129',
+    price: '₹2999',
     frequency: '/mo',
     features: [
       'Everything in Elite',
