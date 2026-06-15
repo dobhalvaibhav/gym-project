@@ -9,9 +9,11 @@ type Props = {
   onClick?: (e: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
   children: React.ReactNode;
   href?: string;
+  target?: string;
+  rel?: string;
 };
 
-export default function Button({ variant = 'primary', onClick, children, href }: Props) {
+export default function Button({ variant = 'primary', onClick, children, href, target, rel }: Props) {
   const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
 
   const handleClick = (e: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
@@ -69,7 +71,7 @@ export default function Button({ variant = 'primary', onClick, children, href }:
 
   if (href) {
     return (
-      <motion.a href={href} onClick={handleClick} {...common} className={variant === 'primary' ? primaryClass : ghostClass}>
+      <motion.a href={href} target={target} rel={rel} onClick={handleClick} {...common} className={variant === 'primary' ? primaryClass : ghostClass}>
         {content}
         {ripples.map((r) => (
           <span key={r.id} className={styles.ripple} style={{ left: r.x, top: r.y }} />

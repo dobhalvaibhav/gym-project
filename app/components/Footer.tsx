@@ -1,4 +1,7 @@
+"use client";
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const footerLinks = [
   {
@@ -14,8 +17,14 @@ const footerLinks = [
     items: [
       { label: 'About Us', href: '/about' },
       { label: 'Our Coaches', href: '/coaches' },
-      { label: 'Schedule', href: '#pricing' },
-      { label: 'Contact', href: '#contact' },
+      {
+        label: 'Schedule',
+        href: 'https://wa.me/917302519340?text=Hi%20Aether%20Fitness!%20I%27d%20like%20to%20schedule%20a%20session.%20Could%20you%20please%20share%20available%20slots%3F',
+      },
+      {
+        label: 'Contact',
+        href: 'https://wa.me/917302519340?text=Hi%20Aether%20Fitness!%20I%20have%20a%20question%20and%20would%20love%20to%20get%20in%20touch.',
+      },
     ],
   },
 ];
@@ -28,6 +37,8 @@ const socials = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+
   return (
     <footer id="contact" className="bg-black border-t border-[#1E1E2A] px-6 pb-10 pt-16 text-white md:px-8">
       <div className="mx-auto grid max-w-7xl gap-12 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
@@ -54,19 +65,31 @@ export default function Footer() {
           <div key={column.heading}>
             <p className="text-sm uppercase tracking-[0.32em] text-neon-blue">{column.heading}</p>
             <ul className="mt-6 space-y-4 text-sm text-muted">
-              {column.items.map((item) => (
-                <li key={item.label}>
-                  {item.href.startsWith('/') ? (
-                    <Link href={item.href} className="transition-all duration-300 hover:text-white">
-                      {item.label}
-                    </Link>
-                  ) : (
-                    <a href={item.href} className="transition-all duration-300 hover:text-white">
-                      {item.label}
-                    </a>
-                  )}
-                </li>
-              ))}
+              {column.items.map((item) => {
+                const isExternal = item.href.startsWith('http');
+                return (
+                  <li key={item.label}>
+                    {item.href.startsWith('/') ? (
+                      item.href === pathname ? (
+                        <span className="cursor-default text-white/50">{item.label}</span>
+                      ) : (
+                        <Link href={item.href} className="transition-all duration-300 hover:text-white">
+                          {item.label}
+                        </Link>
+                      )
+                    ) : (
+                      <a
+                        href={item.href}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        className="transition-all duration-300 hover:text-white"
+                      >
+                        {item.label}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}
@@ -84,13 +107,13 @@ export default function Footer() {
       <div className="mt-12 border-t border-white/10 pt-6 text-sm text-muted md:flex md:items-center md:justify-between">
         <p>© 2026 AETHER FITNESS. All rights reserved.</p>
         <div className="mt-4 flex flex-wrap gap-4 md:mt-0">
-          <a href="#" className="transition-all duration-300 hover:text-white">
+          <Link href="/privacy-policy" className="transition-all duration-300 hover:text-white">
             Privacy Policy
-          </a>
+          </Link>
           <span className="text-white/20">|</span>
-          <a href="#" className="transition-all duration-300 hover:text-white">
+          <Link href="/terms-of-use" className="transition-all duration-300 hover:text-white">
             Terms of Use
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

@@ -1,17 +1,21 @@
 "use client";
 
 import { useEffect, useState, type MouseEvent } from 'react';
+import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { scrollToSection } from '../lib/scrollToSection';
 import Button from './ui/Button';
 
 const navItems = [
-  { label: 'Programs', href: '#programs' },
-  { label: 'Process', href: '#process' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Programs', href: '/#programs' },
+  { label: 'Process', href: '/#process' },
+  { label: 'Pricing', href: '/#pricing' },
+  { label: 'FAQ', href: '/#faq' },
+  {
+    label: 'Contact',
+    href: 'https://wa.me/917302519340?text=Hi%20Aether%20Fitness!%20I%20have%20a%20question%20and%20would%20love%20to%20get%20in%20touch.',
+  },
 ];
 
 export default function Navbar() {
@@ -28,12 +32,33 @@ export default function Navbar() {
 
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const targetId = href.replace('#', '');
-    if (pathname === '/') {
-      scrollToSection(targetId);
-    } else {
-      window.location.href = `/${href}`;
+    const targetId = href.replace('/#', '').replace('#', '');
+    if (href.startsWith('/#')) {
+      if (pathname === '/') {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        window.location.href = href;
+      }
+      return;
     }
+
+    if (href.startsWith('#')) {
+      if (pathname === '/') {
+        scrollToSection(targetId);
+      } else {
+        window.location.href = `/${href}`;
+      }
+      return;
+    }
+
+    if (href.startsWith('http')) {
+      return;
+    }
+
+    window.location.href = href;
   };
 
   return (
@@ -42,23 +67,33 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.75, ease: 'easeOut' }}
-        className={`fixed inset-x-0 top-0 z-40 border-b transition-all duration-300 ${
+        className={`fixed inset-x-0 top-0 h-[60px] z-[100] border-b transition-all duration-300 ${
           scrolled
             ? 'bg-[rgba(5,5,8,0.9)] border-neon-blue/20 backdrop-blur-md'
             : 'bg-transparent border-transparent'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-8">
-          <div className="text-neon-blue text-2xl tracking-[0.32em] font-display uppercase">
+          <Link
+            href="/"
+            style={{ textDecoration: 'none' }}
+            className="font-bebas text-2xl tracking-widest text-[#00C2FF] hover:opacity-80 transition-opacity duration-300 cursor-pointer"
+          >
             AETHER
-          </div>
+          </Link>
 
-          <nav className="hidden items-center gap-10 md:flex">
+          <nav className="hidden md:flex items-center gap-10">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
+                onClick={(e) => {
+                  if (item.href.startsWith('/#') || item.href.startsWith('#')) {
+                    handleNavClick(e, item.href);
+                  }
+                }}
+                target={item.href.startsWith('http') ? '_blank' : undefined}
+                rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                 className="text-sm uppercase tracking-[0.25em] text-white/70 transition-all duration-300 hover:text-white"
               >
                 {item.label}
@@ -80,11 +115,11 @@ export default function Navbar() {
               className="inline-flex h-11 w-11 items-center justify-center rounded-none border border-white/20 text-white md:hidden"
               aria-label="Open menu"
             >
-              <span className="flex h-5 w-5 flex-col justify-between">
-                <span className="block h-[2px] w-full bg-white" />
-                <span className="block h-[2px] w-full bg-white" />
-                <span className="block h-[2px] w-full bg-white" />
-              </span>
+              <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="20" height="2" rx="1" fill="currentColor" />
+                <rect y="7" width="20" height="2" rx="1" fill="currentColor" />
+                <rect y="14" width="20" height="2" rx="1" fill="currentColor" />
+              </svg>
             </button>
           </div>
         </div>
@@ -94,47 +129,59 @@ export default function Navbar() {
         {menuOpen && (
           <motion.div
             key="mobile-menu"
-            initial={{ x: '100%', opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: '100%', opacity: 0 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
-            className="fixed inset-0 z-50 bg-[#050508]/98"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="fixed inset-0 z-[99] bg-[#050508]"
           >
-            <div className="flex h-full flex-col px-8 py-8 text-white">
+            <div className="flex h-full flex-col px-6 py-6 text-white">
               <div className="flex items-center justify-between">
-                <div className="text-neon-blue text-2xl tracking-[0.32em] font-display uppercase">
+                <Link
+                  href="/"
+                  style={{ textDecoration: 'none' }}
+                  className="text-neon-blue text-2xl tracking-[0.32em] font-display uppercase"
+                >
                   AETHER
-                </div>
+                </Link>
                 <button
                   type="button"
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex h-11 w-11 items-center justify-center rounded-none border border-white/20"
                   aria-label="Close menu"
                 >
-                  ×
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 6L18 18M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </button>
               </div>
 
-                <div className="mt-16 flex flex-1 flex-col items-center justify-center gap-10 text-center text-5xl uppercase tracking-[0.32em]">
-                  {navItems.map((item) => (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setMenuOpen(false);
-                        const id = item.href.replace('#', '');
-                        scrollToSection(id);
-                      }}
-                      className="text-white transition-all duration-300 hover:text-neon-blue"
-                    >
-                      {item.label}
-                    </a>
-                  ))}
-                </div>
+                  <div className="mt-16 flex flex-1 flex-col items-center justify-center gap-8 text-center text-3xl font-display uppercase tracking-[0.32em]">
+                {navItems.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => {
+                      setMenuOpen(false);
+                      if (item.href.startsWith('http')) {
+                        return;
+                      }
 
-              <div className="mt-auto border-t border-white/10 pt-8">
-                <Button onClick={() => { setMenuOpen(false); scrollToSection('pricing'); }} variant="ghost">
+                      if (item.href.startsWith('/#') || item.href.startsWith('#')) {
+                        handleNavClick(e, item.href);
+                      }
+                    }}
+                    target={item.href.startsWith('http') ? '_blank' : undefined}
+                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="text-white hover:text-neon-blue transition-all duration-200"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+
+                      <div className="mt-auto border-t border-white/10 pt-6">
+                <Button href="/#pricing" variant="ghost">
                   FREE TRIAL
                 </Button>
               </div>
